@@ -68,7 +68,7 @@ function createWindow(): void {
 
     // Bring to front on macOS
     if (process.platform === 'darwin') {
-      app.dock.show();
+      app.dock?.show();
     }
 
     // Open DevTools in development
