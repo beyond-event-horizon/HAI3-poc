@@ -94,19 +94,15 @@ HAI3 provides a pluggable UI microfrontends architecture that allows developers 
 
 **Goal:** Enable vendors to build secure, isolated plugin ecosystems where third-party developers can contribute screens and integrations without breaking other applications or compromising security.
 
-### V#6 – Shared/Private Store and Global/Local State
+### V#6 – Shared/Private Store
 
-Maintain a predictable global/local state model across all screens.
+Adopt the Flux pattern to maintain a predictable global/local store model.
 
 - Shared read-only state across screensets and individual screens
 - Private state per screenset and individual screens
-- Namespaces: ui, auth, entities, jobs, queries
-- Normalized entities with typed selectors
-- Persistence layers (memory → session → IndexedDB)
-- Event bus for inter-screen communication
-- Response caching strategies
+- Shared store can store - user details, preferences, roles, branding, subscription, etc.
+- Event bus for inter-screen and cross-microfrontend communication
 - Offline, Drafts & Background Sync support
-- LLM friendly state management
 
 **Goal:** Provide a consistent global state model for all screens and services.
 
@@ -114,9 +110,10 @@ Maintain a predictable global/local state model across all screens.
 
 Provide a typed, reusable SDK that abstracts backend APIs through consistent contracts.
 
-- Typed inputs/outputs contracts (OpenAPI / JSON Schema / Zod)
+- Typed inputs/outputs contracts (OpenAPI / JSON Schema) generated on UI build
+- Runtime input/output validation and observability (Zod)
 - Unified API client with retries, ETags, and error normalization
-- Runtime input/output validation and observability
+- Unified caching layer with explicing caching strategies and invalidation policies/APIs
 
 **Goal:** Provide a consistent API access layer for all screens and services.
 
@@ -125,8 +122,7 @@ Provide a typed, reusable SDK that abstracts backend APIs through consistent con
 Security is first-class and configurable per organization/tenant or project.
 
 - OAuth2/OIDC with PKCE and token rotation for enterprise SSO integration
-- Session expiration and idle timeout policies configurable per tenant/project
-- Scoped capabilities and user role-based UI access guards
+- Session expiration and idle timeout policies configurable per project
 - Fine-grained permissions: hide/show/disable UI elements based on user roles
 - Tenant isolation: data, configuration, and UI customization per tenant
 - Encrypted IndexedDB and strict Content-Security-Policy
@@ -139,12 +135,12 @@ Security is first-class and configurable per organization/tenant or project.
 
 HAI3 ensures that all AI-generated and human-refined screens meet accessibility standards and support localization by design.
 
-- WCAG 2.1 AA compliance baked into component library
+- WCAG 2.1 AA compliance baked into component library and AI-prompts
 - Automatic accessibility linting and testing for AI-generated screens
 - i18n namespaces per screen with lazy-loaded locale packs
 - Built-in RTL/LTR layout handling through tokenized CSS and Tailwind utilities
 - Locale-aware date, number, and time formatting helpers for AI-generated UI
-- Per-tenant language preferences with runtime locale switching
+- Interface for per-tenant language preferences with runtime locale switching
 - Translation management integration for professional localization workflows
 
 **Goal:** Ensure every screen produced by HAI3 is accessible, inclusive, and fully localizable across languages and regions. Global enterprises can deploy a single codebase to multiple regions with full localization support. Accessibility compliance reduces legal risk and expands market reach.
@@ -156,7 +152,7 @@ HAI3 establishes a tiered, automated quality assurance pipeline that ensures all
 - Provide unit/components tests (like Jest, Vitest) to validate business logic, component behavior, and state management
 - Visual Regression Tests (like Storybook, Percy, Chromatic) to prevent style drift across devices, themes, and screen sizes
 - End-to-End (E2E) Tests (like Cypress, Playwright) to simulate full user journeys including multitenancy switching, RBAC constraints, and complex workflows
-- Static Analysis for AI Output
+- Static Analysis for AI Output (used styles, localisation, etc.)
 - Automated Accessibility Checks integration into CI pipeline to scan all screens for WCAG 2.1 AA compliance (color contrast, ARIA attributes, keyboard navigation)
 - Microfrontend Isolation Testing to verify sandbox boundaries, CSP enforcement, and inter-plugin communication contracts
 - Automated pre-commit hooks enforce linting, formatting, and basic validation
